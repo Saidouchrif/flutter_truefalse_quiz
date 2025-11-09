@@ -27,12 +27,44 @@ class ExamPage extends StatefulWidget {
 }
 
 class _ExamPageState extends State<ExamPage> {
+  int like = 0;
+  int dislike = 0;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Row(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Icon(Icons.thumb_up, color: Colors.green, size: 30.0),
+                ),
+                Text(
+                  '$like',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            SizedBox(width: 10.0),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Icon(Icons.thumb_down, color: Colors.red, size: 30.0),
+                ),
+                Text(
+                  '$dislike',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ],
+        ),
         Expanded(
           flex: 5,
           child: Column(
@@ -53,6 +85,10 @@ class _ExamPageState extends State<ExamPage> {
             child: TextButton(
               onPressed: () {
                 print("true");
+                setState(() {
+                  like++;
+                });
+                print(like);
               },
               child: Text("Vrai", style: TextStyle(fontSize: 20.0)),
               style: TextButton.styleFrom(
@@ -68,6 +104,9 @@ class _ExamPageState extends State<ExamPage> {
             child: TextButton(
               onPressed: () {
                 print("False");
+                setState(() {
+                  dislike++;
+                });
               },
               child: Text("Faux", style: TextStyle(fontSize: 20.0)),
               style: TextButton.styleFrom(
