@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_truefalse_quiz/question.dart';
+import 'Appbrain.dart';
 
+ AppBrain appBrain = AppBrain();
 void main() {
   runApp(MyApp());
 }
@@ -29,6 +32,23 @@ class ExamPage extends StatefulWidget {
 class _ExamPageState extends State<ExamPage> {
   int like = 0;
   int dislike = 0;
+  void checkanswer(bool userPickedAnswer) {
+    bool correctAnswer = appBrain.questionBank[questionIndex].questionAnswer;
+    if (userPickedAnswer == correctAnswer) {
+      setState(() {
+        like++;
+        questionIndex = (questionIndex + 1) % appBrain.questionBank.length;
+      });
+    } else {
+      setState(() {
+        dislike++;
+        questionIndex = (questionIndex + 1) % appBrain.questionBank.length;
+      });
+    }
+  }
+
+  
+  int questionIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +89,10 @@ class _ExamPageState extends State<ExamPage> {
           flex: 5,
           child: Column(
             children: [
-              Image.asset('images/image-1.jpg'),
+              Image.asset(appBrain.questionBank[questionIndex].questionImage),
               SizedBox(height: 20.0),
               Text(
-                'Le nombre de planètes dans le système solaire est de huit',
+                appBrain.questionBank[questionIndex].questionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               ),
@@ -84,11 +104,7 @@ class _ExamPageState extends State<ExamPage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: TextButton(
               onPressed: () {
-                print("true");
-                setState(() {
-                  like++;
-                });
-                print(like);
+                checkanswer(true);
               },
               child: Text("Vrai", style: TextStyle(fontSize: 20.0)),
               style: TextButton.styleFrom(
@@ -103,10 +119,7 @@ class _ExamPageState extends State<ExamPage> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: TextButton(
               onPressed: () {
-                print("False");
-                setState(() {
-                  dislike++;
-                });
+                checkanswer(false);
               },
               child: Text("Faux", style: TextStyle(fontSize: 20.0)),
               style: TextButton.styleFrom(
