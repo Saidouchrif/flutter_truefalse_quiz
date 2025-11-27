@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_truefalse_quiz/question.dart';
 import 'Appbrain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
- AppBrain appBrain = AppBrain();
+AppBrain appBrain = AppBrain();
 void main() {
   runApp(MyApp());
 }
@@ -33,21 +33,60 @@ class _ExamPageState extends State<ExamPage> {
   int like = 0;
   int dislike = 0;
   void checkanswer(bool userPickedAnswer) {
-    bool correctAnswer = appBrain.questionBank[questionIndex].questionAnswer;
+    // Vérifie la réponse de l'utilisateur
+    bool correctAnswer = appBrain.getQuestionAnswer(questionIndex);
     if (userPickedAnswer == correctAnswer) {
       setState(() {
         like++;
-        questionIndex = (questionIndex + 1) % appBrain.questionBank.length;
+        questionIndex = (questionIndex + 1) % appBrain.getQuestionBankLength();
       });
     } else {
       setState(() {
         dislike++;
-        questionIndex = (questionIndex + 1) % appBrain.questionBank.length;
+        questionIndex = (questionIndex + 1) % appBrain.getQuestionBankLength();
       });
+    }
+    // Vérifie si le quiz est terminé
+    if (isFinished() == true) {
+      Alert(
+        context: context,
+        title: "Quiz Terminé",
+        desc: "Vous reposez $like bonnes réponses et $dislike mauvaises réponses.",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Réinitialiser",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+              reset();
+            },
+            width: 120,
+          ),
+        ],
+      ).show();
     }
   }
 
-  
+  // Vérifie si le quiz est terminé
+  bool isFinished() {
+    if (questionIndex >= appBrain.getQuestionBankLength() - 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Réinitialise le quiz
+  void reset() {
+    setState(() {
+      questionIndex = 0;
+      like = 0;
+      dislike = 0;
+    });
+  }
+
   int questionIndex = 0;
 
   @override
@@ -89,10 +128,10 @@ class _ExamPageState extends State<ExamPage> {
           flex: 5,
           child: Column(
             children: [
-              Image.asset(appBrain.questionBank[questionIndex].questionImage),
+              Image.asset(appBrain.getQuestionImage(questionIndex)),
               SizedBox(height: 20.0),
               Text(
-                appBrain.questionBank[questionIndex].questionText,
+                appBrain.getQuestionText(questionIndex),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               ),

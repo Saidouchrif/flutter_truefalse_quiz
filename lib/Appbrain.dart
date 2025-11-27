@@ -1,7 +1,7 @@
 import 'package:flutter_truefalse_quiz/question.dart';
 
 class AppBrain{
-  List<Question> questionBank = [
+  List<Question> _questionBank = [
     Question(
       questionText:
           "Le nombre de planètes dans le système solaire est de huit planètes.",
@@ -39,4 +39,16 @@ class AppBrain{
       questionAnswer: false,
     ),
   ];
+  String getQuestionText(int index) {
+    return _questionBank[index].questionText;
+  }
+  String getQuestionImage(int index) {
+    return _questionBank[index].questionImage;
+  }
+  bool getQuestionAnswer(int index) {
+    return _questionBank[index].questionAnswer;
+  }
+  int getQuestionBankLength() {
+    return _questionBank.length;
+  }
 }
